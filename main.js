@@ -222,18 +222,13 @@ function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
-function getCards(cardType, total) {
+function getCardsVeryEasy(cardType, total) {
     let gameModeDeck = [];
     let easy = [];
 
     cardType.forEach(element => {
         if (element.difficulty == 'easy') {
-            easy.push({
-                id: element.id,
-                cardFace: element.cardFace,
-                difficulty: 'easy',
-                color: element.color
-            });
+            easy.push(element);
         }
     });
     if (easy.length >= total) {
@@ -251,12 +246,7 @@ function getCards(cardType, total) {
         let normal = [];
         cardType.forEach(element => {
             if (element.difficulty == 'normal') {
-                normal.push({
-                    id: element.id,
-                    cardFace: element.cardFace,
-                    difficulty: 'normal',
-                    color: element.color
-                });
+                normal.push(element);
             }
         });
         while (gameModeDeck.length < total) {
@@ -268,6 +258,101 @@ function getCards(cardType, total) {
     }
     return gameModeDeck;
 }
+
+function getCardsEasy(cardType, total) {
+    let gameModeDeck = [];
+    let withoutHard = [];
+
+    cardType.forEach(element => {
+        if (element.difficulty == 'easy') {
+            withoutHard.push(element);
+        }
+    });
+    cardType.forEach(element => {
+        if (element.difficulty == 'normal') {
+            withoutHard.push(element);
+        }
+    });
+        while (gameModeDeck.length < total) {
+            let randomNumber = getRndInteger(0, withoutHard.length - 1);
+            if (!gameModeDeck.includes(withoutHard[randomNumber])) {
+            gameModeDeck.push(withoutHard[randomNumber]);
+            }
+        }
+    return gameModeDeck;
+}
+
+function getCardsNormal(cardType, total) {
+    let gameModeDeck = [];
+    while (gameModeDeck.length < total) {
+        let randomNumber = getRndInteger(0, cardType.length - 1);
+        if (!gameModeDeck.includes(cardType[randomNumber])) {
+        gameModeDeck.push(cardType[randomNumber]);
+        }
+    }
+    return gameModeDeck;
+}
+
+function getCardsHard(cardType, total) {
+    let gameModeDeck = [];
+    let withoutEasy = [];
+
+    cardType.forEach(element => {
+        if (element.difficulty == 'hard') {
+            withoutEasy.push(element);
+        }
+    });
+    cardType.forEach(element => {
+        if (element.difficulty == 'normal') {
+            withoutEasy.push(element);
+        }
+    });
+        while (gameModeDeck.length < total) {
+            let randomNumber = getRndInteger(0, withoutEasy.length - 1);
+            if (!gameModeDeck.includes(withoutEasy[randomNumber])) {
+            gameModeDeck.push(withoutEasy[randomNumber]);
+            }
+        }
+    return gameModeDeck;
+}
+
+function getCardsVeryHard(cardType, total) {
+    let gameModeDeck = [];
+    let hard = [];
+
+    cardType.forEach(element => {
+        if (element.difficulty == 'hard') {
+            hard.push(element);
+        }
+    });
+    if (hard.length >= total) {
+        while (gameModeDeck.length < total) {
+            let randomNumber = getRndInteger(0, hard.length - 1);
+            if (!gameModeDeck.includes(hard[randomNumber])) {
+            gameModeDeck.push(hard[randomNumber]);
+            }
+        }
+    } else {
+        hard.forEach(element => {
+            gameModeDeck.push(element);
+        })
+        
+        let normal = [];
+        cardType.forEach(element => {
+            if (element.difficulty == 'normal') {
+                normal.push(element);
+            }
+        });
+        while (gameModeDeck.length < total) {
+            let randomNumber = getRndInteger(0, normal.length - 1);
+            if (!gameModeDeck.includes(normal[randomNumber])) {
+            gameModeDeck.push(normal[randomNumber]);
+            }
+        }
+    }
+    return gameModeDeck;
+}
+
 
 function getCardsForRounds(round, greenCards, brownCards, blueCards) {
     let firstRound = [];
@@ -327,11 +412,33 @@ function makeGameModeDeck(playMode) {
     switch (playMode) {
         case 'Очень Низкий':  //Очень легкий уровень сложности: из набора берутся все карты со снежинками, если карт не хватает то добираются обычные карты
             totalCards = getTotalCardsOfAncient(ancient);
-            blueCards = getCards(cardsBlue, totalCards.blueCards);
-            brownCards = getCards(cardsBrown, totalCards.brownCards);
-            greenCards = getCards(cardsGreen, totalCards.greenCards);
+            blueCards = getCardsVeryEasy(cardsBlue, totalCards.blueCards);
+            brownCards = getCardsVeryEasy(cardsBrown, totalCards.brownCards);
+            greenCards = getCardsVeryEasy(cardsGreen, totalCards.greenCards);
             break;
-        case 'Низкий':
+        case 'Низкая': //Легкий уровень сложности: из набора убираются карты с щупальцами
+            totalCards = getTotalCardsOfAncient(ancient);
+            blueCards = getCardsEasy(cardsBlue, totalCards.blueCards);
+            brownCards = getCardsEasy(cardsBrown, totalCards.brownCards);
+            greenCards = getCardsEasy(cardsGreen, totalCards.greenCards);
+            break;
+            case 'Средняя': //Средний уровень сложности: набор остается нетронутым
+            totalCards = getTotalCardsOfAncient(ancient);
+            blueCards = getCardsNormal(cardsBlue, totalCards.blueCards);
+            brownCards = getCardsNormal(cardsBrown, totalCards.brownCards);
+            greenCards = getCardsNormal(cardsGreen, totalCards.greenCards);
+            break;
+            case 'Высокая': //Высокий уровень сложности: из набора убираются карты со снежинками
+            totalCards = getTotalCardsOfAncient(ancient);
+            blueCards = getCardsHard(cardsBlue, totalCards.blueCards);
+            brownCards = getCardsHard(cardsBrown, totalCards.brownCards);
+            greenCards = getCardsHard(cardsGreen, totalCards.greenCards);
+            break;
+            case 'Очень Высокий': //Очень высокий уровень сложности: из набора берутся все карты со щупальцами, если карт не хватает то добираются обычные карты
+            totalCards = getTotalCardsOfAncient(ancient);
+            blueCards = getCardsVeryHard(cardsBlue, totalCards.blueCards);
+            brownCards = getCardsVeryHard(cardsBrown, totalCards.brownCards);
+            greenCards = getCardsVeryHard(cardsGreen, totalCards.greenCards);
             break;
     }
                 
@@ -345,7 +452,7 @@ function makeGameModeDeck(playMode) {
         }
     });
 
-    countCards();
+    countCards(); // вывод схемы колоды. 
 
     let firstRound = reorderCards(getCardsForRounds('first', greenCards, brownCards, blueCards));
     let secondRound = reorderCards(getCardsForRounds('second', greenCards, brownCards, blueCards));
