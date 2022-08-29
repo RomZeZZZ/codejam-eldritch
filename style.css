@@ -17,8 +17,7 @@ body {
     line-height: 1.5;
     color: #030303;
     background-image: url(./assets/home.png);
-    background-repeat: no-repeat;
-    background-repeat: repeat-y;
+    background-repeat: repeat;
     background-size: 100%;
   }
   .startMenu {
@@ -43,7 +42,6 @@ body {
     margin: 0 auto;
     align-items: center;
   }
-
   .main-container {
     display: flex;
     justify-content: space-between;
@@ -73,8 +71,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
-  .difficultesButtonContainer {
 
   }
   .difficultiesText {
@@ -95,10 +91,21 @@ body {
   .stageContainer {
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
   }
   .stageContainerIn {
-    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
   }
-  .circle {
-
+  .ancients-card-holder {
+    border: 4px solid darkred;
+    border-radius: 3%;
+    width: 125%;
+    transition: all 1s ease;
+  }
+  .ancients-card-holder:hover {
+    transform: scale(1.05);
+    cursor: pointer;
   }
